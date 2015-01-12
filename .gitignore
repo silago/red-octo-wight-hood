@@ -9,4 +9,6 @@ proj.linux/
 proj.win32/
 proj.win8.1-universal/
 proj.wp8-xaml/
-
+bin/
+linux-build/
+cocos2d/

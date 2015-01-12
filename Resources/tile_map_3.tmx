@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE map SYSTEM "http://mapeditor.org/dtd/1.0/map.dtd">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="42" tilewidth="16" tileheight="16">
+ <tileset firstgid="1" name="mininicular" tilewidth="16" tileheight="16">
+  <image source="mininicular.png" width="128" height="128"/>
+ </tileset>
+ <tileset firstgid="65" name="mininicular_gray" tilewidth="16" tileheight="16">
+  <image source="mininicular_gray.png" width="128" height="128"/>
+ </tileset>
+ <tileset firstgid="129" name="mininicular_gray" tilewidth="16" tileheight="16">
+  <image source="../../tilemaps/mininicular_gray.png" width="128" height="128"/>
+ </tileset>
+ <layer name="l3" width="40" height="42" visible="0" opacity="0.15">
+  <data encoding="base64" compression="zlib">
+   eJzt0FEKACEIBUC7/6X3cyNYotjKYAYEf5SnEa+SsGozs5nz7frf6Qw358te2f8XTd+zO9cfvvbP3LbC6N7VeQAAAACAOzwNYwE7
+  </data>
+ </layer>
+ <layer name="l2" width="40" height="42" opacity="0.55">
+  <data encoding="base64" compression="zlib">
+   eJztltEOwiAMRfm17s24t/n/36J9IDY3nUJbjJp7ErJBxuVskEFrTzZTxLTbe6/utcubawb0uzzKfuLRoH2HZ1b4KQc49Tq6Yx8xpdIPfbwsrV8Hxjia76V9b0E/z9Hzk8Ex+lzbd8q4oaP3ncRpe5Vj57rCDbM1cwO3mXGsYzWaaf81MwVzPuEXnZ+VfhVrZ7Vfdl2v9rN7XianGvrloF+OX/HrZ6pv9bOOmRw8u2XBPTWS389A1Y6YG8mvyJjJncmvyIjkjuRXZBBCCCGEEEL+kzs9HT6y
+  </data>
+ </layer>
+ <layer name="l1" width="40" height="42">
+  <properties>
+   <property name="Collidable" value="True"/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztlk0PwjAIhnHzpLvpRW9605ur//+3KbEkDPvtui6GJyEzBsq7Mlp6ANgwO0Kcg4hJjfPFhuK5zzkxB8+D6z4y4pCbyHsP+HK/XWaeXF3E+LYTy3sN+ObWZy4uNi9qDb1nbH9rQTWO4dPXWasF7tmY4Ef1Hdh/UpuxVlOvD967BqZa8LmHst6ZW5/sY9RG38jSvcNx6WvV0y7WqInDtZWetzVZ674h2KOx+6UVdMblzgVLwc+2tekjXSnzQwtodiiZ+2rD74VUfR1M7+Rf7mFax8D3fSrrmlJf+k57+MwQT7Z+rk7SwnVs7bN36AKYzgYduGcDnw3CX/424h1Da7kMCmJqm6S1npg+RVEURVEURVH+hxdCmAxJ
+  </data>
+ </layer>
+</map>

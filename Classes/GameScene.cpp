@@ -9,73 +9,70 @@ Scene* GameScene::createScene()
     //scene->getPhysicsWorld()->set
 
     auto layer = GameScene::create();
+
     scene->addChild(layer);
     return scene;
 }
 
 
-// on "init" you need to initialize your instance
 
-//void HelloWorld::ccTouchEnded(Touch *pTouch, Event *pEvent){
-//}
 
-void GameScene::girlWalk(){
-//    /return;
-    Vector<SpriteFrame*> animFrames(4);
-    char str[100] = {0};
-    for(int i = 1; i < 5; i++)
-    {
-        sprintf(str, "gs/girl%d.png",i);
-        auto frame = SpriteFrame::create(str,Rect(0,0,150,214)); //we assume that the sprites' dimentions are 40*40 rectangles.
-        animFrames.pushBack(frame);
-    }
-
-    auto animation = Animation::createWithSpriteFrames(animFrames, 0.1f);
-    auto animate = CCRepeatForever::create(Animate::create(animation));
-    animate->setTag(1);
-    this->girl->runAction(animate);
-}
 
 void GameScene::onKeyReleased(EventKeyboard::KeyCode keyCode, Event *event) {
-    CCLog("key released");
-    if (!this->isGirlMoving) {
-        return;
-    }
-
-    this->girl->stopAllActionsByTag(1);
-    //this->girl->stopA
-    this->isGirlMoving = false;
-    CCLog("key released - all stopped");
+    this->girl->stop();
 }
 
+void GameScene::update(float delts) {
+    float layer_std_width = 1600.0f;
+    //Size visibleSize = Director::getInstance()->getVisibleSize();
+    //Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    float x = this->girl->getPositionX();
+    int halfx = int(x/layer_std_width);
+    //CCLog(" girl position = %f",x);
+    //CCLog(" x/l = %i, count = %i",halfx,this->tile_map_count);
+    if (halfx>=this->tile_map_count) {
+        CCLog("we do some");
+
+        //this->girl->setVisible(false);
+        this->tile_map_count++;
+        this->createWorldPart(int(this->tile_map_count*layer_std_width),0);
+        auto map_to_delete = this->getChildByName(std::to_string(int((this->tile_map_count-3)*layer_std_width)));
+        if (map_to_delete!=NULL) {
+            CCLog("we delete some");
+
+            map_to_delete->removeAllChildrenWithCleanup(true);
+        }
+    }
+    //CCLog("vis width  = %f",visibleSize.width);
+    //CCLog("or x = %f",x);
+
+}
 
 void GameScene::onKeyPressed(EventKeyboard::KeyCode keyCode, Event *event){
-    int x_move = 0;
-    int y_move = 0;
-    this->girl->setRotation(0);
-    if (this->isGirlMoving) {
-   //     return;
-    }
+       this->girl->action(keyCode);
+       if (keyCode==EventKeyboard::KeyCode::KEY_SPACE) {
+           this->girl->say("FUCK!!! SHIT!!!11");
+           //this->setScale(5);
 
-    this->isGirlMoving = true;
+           //this->setAnchorPoint(this->girl->getPosition());
+           /*
+           auto _bg2 = this->_tileMap->layerNamed("l2");
 
-    if (keyCode==EventKeyboard::KeyCode::KEY_LEFT_ARROW) {
-        x_move = -2500;
-    }
-    else if (keyCode==EventKeyboard::KeyCode::KEY_RIGHT_ARROW) {
-        x_move =  2500;
+           for ( int y = 0; y < _bg2->getLayerSize().height; y++) {
+               for (int x = 0; x < _bg2->getLayerSize().width; x++){
+                   if (_bg2->tileAt(Vec2(x,y)) == NULL) {
+                      //CCLog("Tile is NULL");
+                   } else {
+                       auto _s_body = PhysicsBody::createBox(Size(16,16),PhysicsMaterial(100.0f, 0.0f, 0.0f));
+                      _s_body->setDynamic(true);
+                      _bg2->tileAt(Vec2(x,y))->setPhysicsBody(_s_body);
+                      _bg2->tileAt(Vec2(x,y))->setTag(99);
+                   }
+               }
+           }
+        */
 
-    } else if  (keyCode==EventKeyboard::KeyCode::KEY_UP_ARROW) {
-       y_move = 6200;
-    } else return;
-
-    //CCRepeatForever::create(actionMove)
-
-    auto actionMove = CCRepeatForever::create(CCMoveBy::create(10,Vect(x_move,y_move)));
-    actionMove->setTag(1);
-
-    this->girl->runAction( actionMove);
-    this->girlWalk();
+       }
 
 }
 
@@ -90,6 +87,9 @@ bool GameScene::init()
     {
         return false;
     }
+    this->scheduleUpdate();
+    this->setColor(ccc3(255,0,0));
+
 
     auto dispatcher = Director::getInstance()->getEventDispatcher();
     auto listener = EventListenerTouchAllAtOnce::create();
@@ -111,92 +111,15 @@ bool GameScene::init()
 
 
 
-    /* create floor */
-       // auto block = Sprite::create("white_block.png");
-       // auto block_physical_body = PhysicsBody::createBox(block->getContentSize());
-       // block_physical_body->setGravityEnable(false);
-       // block_physical_body->setDynamic(false);
-       // block->setPhysicsBody(PhysicsBody::createBox(Size(16,16)));
-       // block->setPosition(Vec2(visibleSize.width/2 + origin.x,200));
-       // this->addChild(block, 0);
 
-    //auto bg = Sprite::create("bg.png");
-    //bg->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-    //this->addChild(bg,0);
+    this->girl = new Girl();
+    this->girl->setPosition(300,1200);
+    //this->girl->born();
+    this->createWorldPart(0,0);
+    //this->girl->setScale(0.2);
 
-    /* girl sprite */
-    //this->girl = Sprite::create("girl.png");
-    this->girl = Sprite::create();
-    this->girl->setScale(0.25);
-    auto girl_physical_body = PhysicsBody::createBox(Size(37,53));
-
-
-    //this->girl->setScale(0.5);
-    this->girl->setPhysicsBody(girl_physical_body);
-    //this->girl->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + 200+origin.y));
-    //this->girlWalk();
-        this->runAction(Follow::create(this->girl));
-    //girl_physical_body->setGravityEnable(false);
-
-    /* wolf */
-    //auto wolf = Sprite::create("wolf.png");
-    //wolf->setPosition(Vec2(90,90));
-    //2this->addChild(wolf,2);
-
-     auto _tileMap =  CCTMXTiledMap::create("tile_map.tmx");
-     //_tileMap->initWithTMXFile("tile_map.tmx");
-     //_tileMap->initWithTMXFile("tile_map.tmx");
-     auto _bg1 = _tileMap->layerNamed("l1");
-     //_bg1->setVisible(false);
-     //auto tiles_phys = CCArray::create();
-     //Sprite* tiles_phys[][99];
-     //char str[100] = {0};
-     for ( int y = 0; y < _bg1->getLayerSize().height; y++) {
-         for (int x = 0; x < _bg1->getLayerSize().width; x++){
-             if (_bg1->tileAt(Vec2(x,y)) == NULL) {
-                CCLog("Tile is NULL");
-             } else {
-                // auto _s = Sprite::create("red.png");
-                  auto _s_body = PhysicsBody::createBox(Size(100,100));
-                 //_s_body->c
-                 //_s_body->setGravityEnable(false);
-                 //_s->setOpacity(00);
-                 //_s->setPosition(Vect(x*16+60,y*-16+560));
-                 //_s->setPhysicsBody(_s_body);
-                 _s_body->setDynamic(false);
-
-                 _bg1->tileAt(Vec2(x,y))->setPhysicsBody(_s_body);
-                 //sprintf(str, "%dx%d",x,y);
-                 //tiles_phys[x*y]->setName(  str );
-                 //tiles_phys[x*y]->setPosition(Vect(x,y));
-                 //this->addChild(_s,99);
-
-              //   tiles_phys.
-                 //tiles_phys->addObject(PhysicsBody::createBox(Size(16,16)));
-                 //tiles_phys->lastObject()
-                 //CCLog("Tile is not NULL");
-             }
-         }
-     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-     _tileMap->setPosition(Vec2(visibleSize.width/2 -430, visibleSize.height/2 + origin.y- 410));
-     //_bg1->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
-
-     this->addChild(_tileMap);
-     //this->addChild(_bg1);
-
+    this->runAction(Follow::create(this->girl));
+  //this->addChild(_bg1);
 
 
     this->addChild(this->girl, 1);
@@ -204,6 +127,36 @@ bool GameScene::init()
     return true;
 }
 
+void GameScene::createPhysicsObjectsOnTileLayer(TMXLayer* l) {
+    for ( int y = 0; y < l->getLayerSize().height; y++) {
+        for (int x = 0; x < l->getLayerSize().width; x++){
+            if (l->tileAt(Vec2(x,y)) == NULL) {
+               //CCLog("Tile is NULL");
+            } else {
+                auto _s_body = PhysicsBody::createBox(Size(16,16),PhysicsMaterial(100.0f, 20.0f, -20.0f));
+                _s_body->setDynamic(false);
+                l->tileAt(Vec2(x,y))->setPhysicsBody(_s_body);
+            }
+        }
+    }
+}
+
+void GameScene::createWorldPart(int x =0, int y = 0) {
+    //Size visibleSize = Director::getInstance()->getVisibleSize();
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+
+    auto _tileMap =  CCTMXTiledMap::create("tile_map_4.tmx");
+    _tileMap->setName(std::to_string(x));
+    _tileMap->setScale(3);
+    auto _bg1 = _tileMap->layerNamed("l1");
+    //if (x==0)
+    this->createPhysicsObjectsOnTileLayer(_bg1);
+    _tileMap->setPosition(Vec2(x,y));
+
+    this->addChild(_tileMap);
+
+}
 
 void GameScene::menuCloseCallback(Ref* pSender)
 {
